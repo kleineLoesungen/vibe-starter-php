@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\TestMail;
+use App\Services\UpdateCheck;
+use App\Support\Changelog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -20,6 +22,8 @@ use Illuminate\View\View;
  */
 class SystemController extends Controller
 {
+    public function __construct(private UpdateCheck $updates) {}
+
     public function index(Request $request): View
     {
         $mailer = (string) config('mail.default');
@@ -27,6 +31,10 @@ class SystemController extends Controller
         $settings = config("mail.mailers.{$mailer}", []);
 
         return view('admin.system', [
+            // Ruft hoechstens alle 24 Stunden wirklich ab; sonst aus dem Zwischenspeicher.
+            'update' => $this->updates->status(config('updates.check_url')),
+            // Installierte Version und die drei davor.
+            'changelog' => array_slice(Changelog::entries(), 0, 4),
             'mail' => [
                 'mailer' => $mailer,
                 'host' => $settings['host'] ?? null,
@@ -44,6 +52,16 @@ class SystemController extends Controller
             'debug' => (bool) config('app.debug'),
             'testMailTo' => old('to', $request->user()->email),
         ]);
+    }
+
+    /** „Jetzt pruefen": uebergeht den Zwischenspeicher. */
+    public function updateCheck(Request $request): RedirectResponse
+    {
+        $status = $this->updates->status(config('updates.check_url'), force: true);
+
+        Log::info('Update-Prüfung ausgelöst', ['by' => $request->user()->id, 'erreichbar' => $status->ok]);
+
+        return back()->with('checked', $status->ok ? 'ok' : 'failed');
     }
 
     public function testMail(Request $request): RedirectResponse

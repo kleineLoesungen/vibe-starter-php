@@ -70,6 +70,13 @@
       <span>{{ $branding->name }}</span>
       <a href="/styleguide" class="hover:text-content">Styleguide</a>
       <a href="/api/v1/health" class="hover:text-content">API-Status</a>
+      {{-- Nur fuer Angemeldete: Ein Veroeffentlichungsdatum verriete sonst jedem,
+           welche Korrekturen dieser Installation noch fehlen. --}}
+      @auth
+        @if ($appVersion)
+          <span class="ml-auto">Version {{ $appVersion }}</span>
+        @endif
+      @endauth
     </div>
   </footer>
 </div>

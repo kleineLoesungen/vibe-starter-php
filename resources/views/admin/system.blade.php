@@ -15,6 +15,92 @@
   </p>
 </div>
 
+{{-- --- Version ------------------------------------------------------------ --}}
+<section class="card mb-6">
+  <div class="card-header">
+    <h2 class="card-title">Version</h2>
+    @if ($update->enabled)
+      <form method="post" action="/admin/system/update-check">
+        @csrf
+        <button type="submit" class="btn btn-ghost btn-sm">Jetzt prüfen</button>
+      </form>
+    @endif
+  </div>
+
+  <div class="card-body stack">
+    @if (session('checked') === 'ok')
+      <div class="alert alert-success" role="status">Geprüft.</div>
+    @elseif (session('checked') === 'failed')
+      <div class="alert alert-warning" role="status">
+        Die Prüfung war nicht möglich. Der zuletzt bekannte Stand bleibt stehen.
+      </div>
+    @endif
+
+    <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-sm">
+      <dt class="text-muted">Installiert</dt>
+      <dd class="min-w-0 font-medium">
+        {{ $update->installedLabel() ?? '' }}
+        @unless ($update->installedLabel())
+          <span class="text-subtle">unbekannt</span>
+        @endunless
+      </dd>
+
+      @if ($update->enabled)
+        <dt class="text-muted">Neueste</dt>
+        <dd class="min-w-0 font-medium">
+          {{ $update->latestLabel() ?? '' }}
+          @unless ($update->latestLabel())
+            <span class="text-subtle">–</span>
+          @endunless
+        </dd>
+
+        <dt class="text-muted">Zuletzt geprüft</dt>
+        <dd class="min-w-0 text-muted">
+          @if ($update->checkedAt)
+            <x-datetime :value="$update->checkedAt" />
+            @unless ($update->ok)
+              <span class="text-warning"> · nicht erreichbar</span>
+            @endunless
+          @else
+            <span class="text-subtle">noch nie</span>
+          @endif
+        </dd>
+      @else
+        <dt class="text-muted">Prüfung</dt>
+        <dd class="min-w-0">
+          abgeschaltet — kein <code class="code">UPDATE_CHECK_URL</code> gesetzt
+        </dd>
+      @endif
+    </dl>
+
+    @if ($update->updateAvailable())
+      <div class="alert alert-info">
+        <div>
+          <p class="font-medium">Es gibt eine neuere Version</p>
+          <p class="mt-1">Die Anwendung aktualisiert sich nicht selbst.</p>
+        </div>
+      </div>
+
+      @foreach ($update->newer as $eintrag)
+        <div>
+          <p class="mb-2 text-sm font-semibold">{{ $eintrag->label() }}</p>
+          <x-changelog-items :entry="$eintrag" />
+        </div>
+      @endforeach
+    @endif
+
+    @if ($changelog !== [])
+      <div class="border-t border-border pt-4">
+        <p class="mb-3 text-sm font-semibold">Änderungen dieser Installation</p>
+        @foreach ($changelog as $eintrag)
+          <p class="mt-3 text-sm font-medium">{{ $eintrag->label() }}</p>
+          <x-changelog-items :entry="$eintrag" />
+        @endforeach
+      </div>
+    @endif
+  </div>
+</section>
+
 <div class="grid gap-6 lg:grid-cols-2">
 
   {{-- --- App und PWA ------------------------------------------------------ --}}

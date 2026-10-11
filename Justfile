@@ -71,7 +71,9 @@ db-shell:
 # Alles pruefen: Formatierung, statische Analyse, Templates, Tests.
 check: fmt-check lint views test
 
-test:
+# Tests laufen gegen die echte Postgres — die wird deshalb vorher gestartet
+# (laeuft sie schon, kostet das nur einen Augenblick).
+test: db-up
     php artisan config:clear --ansi
     php artisan test
 

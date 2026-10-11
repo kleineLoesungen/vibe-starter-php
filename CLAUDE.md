@@ -212,6 +212,35 @@ Link hält niemanden davon ab, das Formular von Hand abzuschicken.
 
 ---
 
+## Changelog ist die Version
+
+`CHANGELOG.md` wird von Hand gepflegt, und die **oberste Überschrift ist die
+Version**, die die Anwendung von sich meldet. Es gibt keine Versionsnummer in
+`composer.json`, die nachgezogen werden müsste.
+
+```markdown
+## 2026.10.11
+- Suche in der Benutzerliste
+- Migration: 2026_10_11_000000_create_projects_table.php
+```
+
+* Format `JJJJ.MM.TT`, bei mehreren Veröffentlichungen am selben Tag `.2`, `.3`.
+* Einträge sind für **Betreiber** geschrieben, nicht für Entwickler. Nicht der
+  Commit-Titel, sondern was sich für die Benutzung ändert.
+* Zeilen mit `Migration:` werden getrennt hervorgehoben.
+* **Jede nennenswerte Änderung bekommt einen Eintrag** — am besten im selben
+  Commit. Eine neue Version anlegen heißt: eine neue Überschrift mit dem Datum.
+
+Gelesen wird die Datei zur Laufzeit (`App\Support\Changelog`). Sie muss
+deshalb im Abbild liegen — `.dockerignore` darf sie nicht ausschließen.
+
+Mit gesetztem `UPDATE_CHECK_URL` vergleicht die Anwendung ihre Version
+höchstens täglich mit der Rohdatei im Repository und zeigt Administratoren
+neuere Einträge (`App\Services\UpdateCheck`). Ohne die Variable passiert
+nichts, auch kein Netzzugriff.
+
+---
+
 ## E-Mail
 
 ```php

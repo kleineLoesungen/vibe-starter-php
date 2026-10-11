@@ -84,4 +84,5 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     Route::get('/system', [SystemController::class, 'index']);
     Route::post('/system/testmail', [SystemController::class, 'testMail']);
+    Route::post('/system/update-check', [SystemController::class, 'updateCheck']);
 });

@@ -8,7 +8,7 @@ Anmeldung, Rollen, App-Tokens und ein anpassbares Design sind bereits eingebaut.
 Gemacht für die Arbeit mit KI-Assistenten: klare Regeln in [CLAUDE.md](CLAUDE.md),
 fertige Rezepte, ein strenges `just check` — und kein Node.
 
-Das Gegenstück in Rust: [kleineLoesungen/starter-rust](https://github.com/kleineLoesungen/starter-rust).
+Das Gegenstück in Rust: [kleineLoesungen/vibe-starter-rust](https://github.com/kleineLoesungen/vibe-starter-rust).
 Gleiche Oberfläche, gleiche Konzepte, gleiche Doku-Struktur.
 
 ---
@@ -93,8 +93,9 @@ Ende. Zeigt `git remote -v` noch auf das Kit: `git remote remove origin`.
 | Installierbar | PWA mit Manifest, Icons und Offline-Seite; Name und Farben per Umgebung |
 | E-Mail | SMTP, lokal Mailpit, Testmail unter **System** |
 | Container | Mehrstufiges Dockerfile, FrankenPHP, unprivilegierter Benutzer |
+| Version | `CHANGELOG.md` ist die Version; Anzeige unter **System**, Hinweis auf neuere Versionen |
 | Qualität | Pint, Larastan (Stufe 6), Strict Mode für Eloquent |
-| Tests | 103 Pest-Tests gegen eine echte Postgres |
+| Tests | 134 Pest-Tests gegen eine echte Postgres |
 
 ---
 
@@ -108,12 +109,13 @@ app/
 │   ├── ApiTokenService.php  Ausstellen, Prüfen, Widerrufen
 │   └── LoginThrottle.php    Bremse gegen Passwort-Raten
 │
-├── Models/                Daten und Beziehungen (User, Note, ApiToken)
+├── Models/                Daten und Beziehungen (User, Note, ApiToken, Setting)
 ├── Enums/
 │   ├── Role.php             Rollen und ihre Rangfolge
 │   └── Scope.php            Was ein App-Token darf
+│   └── UpdateCheck.php      Abgleich mit dem Changelog im Repository
 ├── Auth/TokenFormat.php   Aufbau und Prüfung der App-Tokens
-├── Support/Branding.php   Name und Farben aus der Umgebung
+├── Support/               Branding (Name, Farben), Changelog (Version)
 ├── Mail/                  Eine Klasse je Mail
 │
 └── Http/
@@ -127,6 +129,7 @@ routes/
 ├── web.php                ← Wer darf was? Die GRUPPE entscheidet.
 └── api.php                ← Welcher Scope? Steht an der Route.
 
+CHANGELOG.md               ← die Version der Anwendung, von Hand gepflegt
 bootstrap/app.php          Middleware, Fehlerbehandlung für API und htmx
 config/                    Die einzige Stelle, an der env() gelesen wird
 

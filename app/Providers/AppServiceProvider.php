@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\UserService;
 use App\Support\Branding;
+use App\Support\Changelog;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -32,5 +33,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Name und Farben in jedem Template als $branding.
         View::share('branding', Branding::current());
+
+        // Version fuer die Fusszeile — nur dort, deshalb kein share().
+        View::composer('layouts.app', fn (\Illuminate\View\View $view) => $view->with(
+            'appVersion', Changelog::installedLabel(),
+        ));
     }
 }

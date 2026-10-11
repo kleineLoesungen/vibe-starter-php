@@ -28,6 +28,8 @@ Diese Liste durchgehen:
       nach Gerät erst verzögert oder nach Neuinstallation.
 - [ ] Datenbanksicherung eingerichtet **und einmal zurückgespielt**.
 - [ ] `LOG_LEVEL=info` — `debug` protokolliert deutlich mehr.
+- [ ] Neuer Eintrag in `CHANGELOG.md` mit dem Datum dieser Veröffentlichung.
+      Die oberste Überschrift ist die Version, die die Instanz anzeigt.
 - [ ] Erstes Konto anlegen und prüfen, dass es Administrator ist.
 
 ---
@@ -92,6 +94,42 @@ damit auch die Datenbankverbindung, nicht nur den Prozess.
 Scheitert ein Schritt — etwa weil die Datenbank nicht erreichbar ist oder eine
 Farbe in der Umgebung falsch geschrieben ist —, beendet sich der Container mit
 einer Meldung im Log.
+
+---
+
+## Version und Update-Hinweis
+
+Die installierte Version ist die oberste Überschrift in `CHANGELOG.md`. Sie
+steht unter **System** und klein in der Fußzeile — beides nur für Angemeldete.
+
+Mit
+
+```bash
+UPDATE_CHECK_URL=https://raw.githubusercontent.com/konto/repo/main/CHANGELOG.md
+```
+
+vergleicht die Instanz ihre Version höchstens **einmal täglich** mit dieser
+Datei und zeigt Administratoren neuere Einträge. Sie lädt nichts herunter und
+installiert nichts.
+
+Vier Punkte dazu:
+
+- **Die Instanz spricht dabei nach außen** und verrät der Gegenstelle ihre
+  IP-Adresse. Wer das nicht will, lässt die Variable leer — dann findet kein
+  Netzzugriff statt. Das ist die Vorgabe.
+- Die Datei muss **öffentlich lesbar** sein. Für private Repositories bräuchte
+  es ein Zugangstoken; das ist nicht eingebaut. Kein Token in die Adresse
+  schreiben — sie taucht im Log auf (ohne Query, aber darauf sollte man sich
+  nicht verlassen).
+- Umleitungen folgt die Anwendung nur zu `https` und höchstens dreimal, liest
+  höchstens 256 KiB und bricht nach 3 Sekunden ab. Sonst könnte die Gegenstelle
+  den Server auf eine interne Adresse schicken oder die Systemseite aufhalten.
+- Ist die Gegenstelle nicht erreichbar, bleibt der zuletzt bekannte Stand
+  stehen und wird als veraltet gekennzeichnet. Die Anwendung läuft unberührt
+  weiter.
+
+Der Zwischenspeicher liegt in der Tabelle `settings` unter dem Schlüssel
+`update_check`. Ein Wechsel der Prüfadresse verwirft ihn.
 
 ---
 

@@ -166,6 +166,22 @@ ersetze docs/DEPLOY.md 'docker stop starter-php && docker rm starter-php' "docke
 ersetze docs/DEPLOY.md 'docker exec -it starter-php' "docker exec -it $NAME"
 ersetze docs/DEPLOY.md '/etc/starter-php/env' "/etc/$NAME/env"
 
+# Changelog zuruecksetzen: Ein Projekt aus dem Kit hat seine eigene Geschichte.
+# Ohne das zeigte es die Versionen des Kits an.
+cat > CHANGELOG.md <<CHANGELOG
+# Änderungen
+
+Neueste Version oben. Eine Überschrift je Version im Format \`JJJJ.MM.TT\`,
+bei mehreren Veröffentlichungen am selben Tag mit angehängter Zählung (\`.2\`).
+Die oberste Überschrift ist die Version, die die Anwendung von sich meldet.
+
+Einträge sind reiner Text — Markdown darin wird nicht ausgewertet.
+Zeilen, die mit \`Migration:\` beginnen, werden getrennt hervorgehoben.
+
+## $(date +%Y.%m.%d)
+- Projekt aus dem Kit angelegt
+CHANGELOG
+
 # composer.lock nachziehen: Nur der Paketname aendert sich, keine
 # Abhaengigkeit wird aktualisiert.
 if command -v composer >/dev/null 2>&1; then
@@ -201,4 +217,7 @@ Nächste Schritte:
 Danach nach Belieben: README-Titel, Icons (resources/icons/), --brand-hue in
 resources/css/theme.css. Zeigt 'git remote -v' noch auf das Kit:
   git remote remove origin
+
+Für den Hinweis auf neuere Versionen in .env eintragen (eigenes Repository):
+  UPDATE_CHECK_URL=https://raw.githubusercontent.com/<konto>/$NAME/main/CHANGELOG.md
 FERTIG
