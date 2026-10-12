@@ -295,8 +295,8 @@ Nur semantische Tokens verwenden:
 
 Verfügbar sind `surface`, `surface-raised`, `surface-sunken`, `border`,
 `border-strong`, `content`, `muted`, `subtle`, `brand`, `brand-subtle`,
-`brand-content`, `success`, `warning`, `danger` — jeweils als `bg-`, `text-`
-und `border-`. Dazu `rounded-ui` für die einheitliche Eckenrundung.
+`brand-content`, `success`, `warning`, `danger`, `danger-content` (Schrift auf
+`bg-danger`) — jeweils als `bg-`, `text-` und `border-`. Dazu `rounded-ui` für die einheitliche Eckenrundung.
 
 Wiederkehrendes Markup wird zu einer Klasse in `resources/css/components.css`
 oder zu einer Blade-Komponente unter `resources/views/components/`, nicht zu

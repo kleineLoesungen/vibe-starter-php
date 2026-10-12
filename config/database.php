@@ -95,7 +95,9 @@ return [
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
-            'search_path' => 'public',
+            // PostgreSQL-Schema fuer alle Tabellen. Hoster geben oft eine
+            // Datenbank mit mehreren Schemata vor; DB_SCHEMA waehlt unseres.
+            'search_path' => env('DB_SCHEMA', 'public'),
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 

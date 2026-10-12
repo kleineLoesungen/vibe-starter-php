@@ -117,7 +117,8 @@ automatisch mit, die zweite bleibt weiß.
 `brand-subtle` (zurückhaltende Markenfläche)
 
 **Zustände:** `success`, `warning`, `danger` — jeweils auch als `-subtle`
-für die zugehörige Hintergrundfläche.
+für die zugehörige Hintergrundfläche. Dazu `danger-content`: die Schrift auf
+`bg-danger`. Nicht einfach Weiß — im Dunkelmodus ist die Fläche hell.
 
 Jede Rolle gibt es als `bg-`, `text-` und `border-`. Dazu `rounded-ui` für die
 projektweit einheitliche Eckenrundung und `ring-focus` für Fokusringe.

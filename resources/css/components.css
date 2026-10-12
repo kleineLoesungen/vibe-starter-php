@@ -63,7 +63,7 @@
   .btn-primary   { @apply bg-brand text-brand-content hover:bg-brand-hover; }
   .btn-secondary { @apply border border-border bg-surface-raised text-content hover:bg-surface-sunken; }
   .btn-ghost     { @apply text-muted hover:bg-surface-sunken hover:text-content; }
-  .btn-danger    { @apply bg-danger text-white hover:opacity-90; }
+  .btn-danger    { @apply bg-danger text-danger-content hover:opacity-90; }
 
   .btn-sm   { @apply h-8 px-3 text-xs; }
   .btn-lg   { @apply h-12 px-6 text-base; }
@@ -76,9 +76,11 @@
 
   .label { @apply text-sm font-medium text-content; }
 
+  /* 16 px auf dem Telefon: In jedes Feld mit kleinerer Schrift zoomt iOS beim
+     Antippen hinein — die Seite springt dann bei jeder Eingabe. */
   .input, .textarea, .select {
     @apply w-full rounded-ui border border-border bg-surface-raised
-           px-3 text-sm text-content placeholder:text-subtle
+           px-3 text-base sm:text-sm text-content placeholder:text-subtle
            transition-colors
            focus:border-brand focus:outline-none
            disabled:cursor-not-allowed disabled:opacity-60;
@@ -228,9 +230,14 @@
 
   /* --- Meldungen (Toasts) ----------------------------------------------- */
 
+  /* Oberhalb der unteren Leiste, damit eine Meldung nie einen Menuepunkt
+     verdeckt. Auf breiten Bildschirmen gibt es die Leiste nicht. */
   .toast-region {
-    @apply pointer-events-none fixed inset-x-0 bottom-4 z-50 flex flex-col
+    @apply pointer-events-none fixed inset-x-0 z-50 flex flex-col
            items-center gap-2 px-4;
+    bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+
+    @media (width >= 64rem) { bottom: 1rem; }
   }
   .toast {
     @apply pointer-events-auto flex items-center gap-3 rounded-ui border
